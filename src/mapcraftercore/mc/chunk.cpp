@@ -186,18 +186,220 @@ bool Chunk::readNBT(const char* data, size_t len, nbt::Compression compression) 
 
       for (i=0; i<4096; ++i) {
         uint8_t d = 0;
+        // Read data and zero it for now.
         if (i % 2 == 0) {
           d = section.data[i / 2] & 0x0f;
-          section.data[i / 2] = section.data[i / 2] & 0xf0;
+          section.data[i / 2] &= 0xf0;
         } else {
           d = ( section.data[i / 2] >> 4 ) & 0x0f;
-          section.data[i / 2] = section.data[i / 2] & 0x0f;
+          section.data[i / 2] &= 0x0f;
         }
         int32_t paletteId = (section.blocks[i] & 255) << 4 | d;
         if (paletteId > plen) {
           LOG(WARNING) << "Looking up Palette outside of boundaries at " << paletteId << " of " << plen;
         }
-        section.blocks[i] = palette_lookup[paletteId] >> 4;
+        int32_t val = palette_lookup[paletteId];
+        if (val >= 4096) {
+          switch(val) {
+            // leaves
+          case 35952:
+            val = 18;
+            break;
+          case 35954:
+            val = 18;
+            break;
+          case 35856:
+            val = 18;
+            break;
+          case 35858:
+            val = 18;
+            break;
+          case 35890:
+            val = 18;
+            break;
+          case 35888:
+            val = 18;
+            break;
+          case 35920:
+            val = 18;
+            break;
+          case 35922:
+            val = 18;
+            break;
+          case 14179:
+            val = 18;
+            break;
+          case 14187:
+            val = 18;
+            break;
+            // wood
+          case 51971:
+            val = 5;
+            break;
+            // unknown
+          case 14131:
+            val = 0;
+            break;
+          case 4156:
+            val = 31;
+            break;
+          case 4159:
+            val = 31;
+            break;
+          case 4161:
+            val = 162;
+            break;
+          case 16726:
+            val = 0;
+            break;
+          case 51955:
+            val = 0;
+            break;
+          case 5536:
+            val = 0;
+            break;
+          case 10487:
+            val = 0;
+            break;
+          case 10535:
+            val = 0;
+            break;
+          case 8103:
+            val = 0;
+            break;
+          case 4202: // some plant
+            val = 175;
+            break;
+          case 4104: // another plant?
+            val = 175;
+            break;
+          case 6963: // more plants
+            val = 175;
+            break;
+          case 51952:
+            val = 175;
+            break;
+          case 4146:
+            val = 175;
+            break;
+          case 4160:
+            val = 175;
+            break;
+          case 51969:
+            val = 175;
+            break;
+          case 51954:
+            val = 175;
+            break;
+          case 4201:
+            val = 175;
+            break;
+          case 4184:
+            val = 175;
+            break;
+          case 4154:
+            val = 175;
+            break;
+          case 4155:
+            val = 175;
+            break;
+          case 4219: // top of 2-block high thinies
+            val = 174;
+            break;
+          case 4235:
+            val = 174;
+            break;
+          case 4212: // and the bottom
+            val = 174;
+            break;
+          case 4206:
+            val = 0;
+            break;
+          case 4180:
+            val = 0;
+            break;
+          case 4185:
+            val = 0;
+            break;
+          case 4209:
+            val = 0;
+            break;
+          case 4228:
+            val = 0;
+            break;
+          case 16722:
+            val = 0;
+            break;
+          case 51953:
+            val = 0;
+            break;
+          case 38112:
+            val = 0;
+            break;
+          case 4193:
+            val = 0;
+            break;
+          case 4168:
+            val = 0;
+            break;
+          case 4227:
+            val = 0;
+            break;
+          case 4194:
+            val = 0;
+            break;
+          case 4145:
+            val = 0;
+            break;
+          case 4200:
+            val = 0;
+            break;
+          case 51968:
+            val = 0;
+            break;
+          case 51970:
+            val = 0;
+            break;
+          case 4151:
+            val = 0;
+            break;
+          case 4210:
+            val = 0;
+            break;
+          case 4167:
+            val = 0;
+            break;
+          case 4197:
+            val = 0;
+            break;
+          case 4192:
+            val = 0;
+            break;
+          case 4196:
+            val = 0;
+            break;
+          case 4170:
+            val = 0;
+            break;
+            // TODO
+          case 99999:
+            val = 26;
+            break;
+          default:
+            // .... .... .... ....
+            // DATA BLOCK-ID_ GARB
+            LOG(WARNING) << "Unknown (modded) block id: " << val;
+            if (i % 2 == 0) {
+              section.data[i / 2] |= val >> 12 & 0x0f;
+            } else {
+              section.data[i / 2] |= val >> 8 & 0xf0;
+            }
+            val = val >> 4 & 0xff;
+          }
+          section.blocks[i] = val;
+        } else {
+          section.blocks[i] = val >> 4;
+        }
       }
     }
 
