@@ -173,7 +173,7 @@ bool Chunk::readNBT(const char* data, size_t len, nbt::Compression compression) 
         palette_lookup[i] = (*pit);
       }
 
-      for (i=0; i<2048; ++i) {
+      for (i=0; i<4096; ++i) {
         section.blocks[i] = palette_lookup[section.blocks[i]];
       }
     }
