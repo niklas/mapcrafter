@@ -192,6 +192,9 @@ bool Chunk::readNBT(const char* data, size_t len, nbt::Compression compression) 
           d = ( section.data[i / 2] >> 4 ) & 0x0f;
         }
         int32_t paletteId = (section.blocks[i] & 255) << 4 | d;
+        if (paletteId > plen) {
+          LOG(WARNING) << "Looking up Palette outside of boundaries at " << paletteId << " of " << plen;
+        }
         section.blocks[i] = palette_lookup[paletteId];
       }
     }
