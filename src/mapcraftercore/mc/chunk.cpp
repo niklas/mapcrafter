@@ -122,7 +122,7 @@ bool Chunk::readNBT(const char* data, size_t len, nbt::Compression compression) 
 	// chunks of the end
 	if (!level.hasList<nbt::TagCompound>("Sections"))
 		return true;
-	
+
 	const nbt::TagList& sections_tag = level.findTag<nbt::TagList>("Sections");
 	if (sections_tag.tag_type != nbt::TagCompound::TAG_TYPE)
 		return true;
@@ -130,7 +130,7 @@ bool Chunk::readNBT(const char* data, size_t len, nbt::Compression compression) 
 	// go through all sections
 	for (auto it = sections_tag.payload.begin(); it != sections_tag.payload.end(); ++it) {
 		const nbt::TagCompound& section_tag = (*it)->cast<nbt::TagCompound>();
-		
+
 		// make sure section is valid
 		if (!section_tag.hasTag<nbt::TagByte>("Y")
 				|| !section_tag.hasArray<nbt::TagByteArray>("Blocks", 4096)
@@ -138,7 +138,7 @@ bool Chunk::readNBT(const char* data, size_t len, nbt::Compression compression) 
 				|| !section_tag.hasArray<nbt::TagByteArray>("BlockLight", 2048)
 				|| !section_tag.hasArray<nbt::TagByteArray>("SkyLight", 2048))
 			continue;
-		
+
 		const nbt::TagByte& y = section_tag.findTag<nbt::TagByte>("Y");
 		if (y.payload >= CHUNK_HEIGHT)
 			continue;
