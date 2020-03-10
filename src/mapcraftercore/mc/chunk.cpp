@@ -388,7 +388,7 @@ bool Chunk::readNBT(const char* data, size_t len, nbt::Compression compression) 
           default:
             // .... .... .... ....
             // DATA BLOCK-ID_ GARB
-            LOG(WARNING) << "Unknown (modded) block id: " << val;
+            //LOG(WARNING) << "Unknown (modded) block id: " << val;
             if (i % 2 == 0) {
               section.data[i / 2] |= val >> 12 & 0x0f;
             } else {
@@ -396,7 +396,7 @@ bool Chunk::readNBT(const char* data, size_t len, nbt::Compression compression) 
             }
             val = val >> 4 & 0xff;
           }
-          section.blocks[i] = val;
+          section.blocks[i] = 0;
         } else {
           section.blocks[i] = val >> 4;
         }
