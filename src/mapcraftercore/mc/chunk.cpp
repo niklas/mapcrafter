@@ -91,6 +91,7 @@ bool Chunk::readNBT(const char* data, size_t len, nbt::Compression compression) 
 		const nbt::TagByteArray& biomes_tag = level.findTag<nbt::TagByteArray>("Biomes");
 		std::copy(biomes_tag.payload.begin(), biomes_tag.payload.end(), biomes);
 	} else if (level.hasArray<nbt::TagIntArray>("Biomes", 256)) {
+    // JustEnoughIDs https://www.curseforge.com/minecraft/mc-mods/jeid?page=7&sort=game-version
 		const nbt::TagIntArray& biomes_tag = level.findTag<nbt::TagIntArray>("Biomes");
 		std::copy(biomes_tag.payload.begin(), biomes_tag.payload.end(), biomes);
 	} else {
@@ -159,8 +160,10 @@ bool Chunk::readNBT(const char* data, size_t len, nbt::Compression compression) 
 		section.y = y.payload;
 		std::copy(blocks.payload.begin(), blocks.payload.end(), section.blocks);
     if (section_tag.hasArray<nbt::TagIntArray>("Palette")) {
-      // In some of our chunks, there is a palette with a dynamic number of ints.
-      // In others, there is "Add"s
+      // In some of our chunks, there is a palette with a dynamic number of
+      // ints. This seems to be a 1.13 backport to 1.12 done by JustEnoughIDs
+      // https://github.com/DimensionalDevelopment/JustEnoughIDs In others,
+      // there is "Add"s
       const nbt::TagIntArray& palette = section_tag.findTag<nbt::TagIntArray>("Palette");
       int32_t plen = (unsigned) palette.payload.size();
       std::vector<uint16_t> palette_lookup(plen);
