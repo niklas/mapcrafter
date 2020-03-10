@@ -5,7 +5,7 @@
 FROM alpine:3.8 as builder
 
 # Add the git repo
-VOLUME . /git/mapcrafter
+ADD . /git/mapcrafter
 
 # Dependencies needed for building Mapcrafter
 # (not sure how many of these are actually needed)
