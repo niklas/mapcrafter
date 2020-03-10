@@ -1,5 +1,7 @@
 # Mapcrafter [![Build Status](https://travis-ci.org/mapcrafter/mapcrafter.svg?branch=master)](https://travis-ci.org/mapcrafter/mapcrafter) #
 
+**This fork is adapted to the Modpack Sevtech Ages, which thanks to JustEnoughIDs saves chunks in a new format: Biomes are an int array (instead of bytes) and block/data is indexed through a Palette (different from 1.13) to increase the number of ids.**
+
 **For Minecraft 1.13, see issue [#113](https://github.com/mapcrafter/mapcrafter/issues/275). TL;DR: Minecraft 1.13 support is pretty much complete, few small features and full documentation are still in progress. Can be built from source from `world113` branch or [nightly packages](https://mapcrafter.org/downloads/nightly) can be used.**
 
 by Moritz Hilscher
@@ -28,7 +30,7 @@ stuff of the template from Minecraft Overviewer.
 * **Different render views:** Choose between different perspectives to render your world
   from! A 2D topdown and a 3D isometric render view are available!
 * **Different rotations:** Choose from four different rotations to render your worlds from!
-* **Different render modes:** Choose between different render modes like day, night and cave 
+* **Different render modes:** Choose between different render modes like day, night and cave
   for your maps!
 * **Different overlays:** Show additional information on your map! For example: Where can
   slimes spawn? Where can monsters spawn at night?
@@ -71,10 +73,10 @@ If you find bugs or problems when using Mapcrafter or if you have ideas for new
 features, then please feel free to add an issue to the [GitHub issue
 tracker](https://github.com/mapcrafter/mapcrafter/issues).
 
-You can contact me in IRC (#mapcrafter on Freenode). Use the 
+You can contact me in IRC (#mapcrafter on Freenode). Use the
 [webclient](http://webchat.freenode.net/?channels=mapcrafter>) if you
 are new to IRC. I will be there most of the time, but please bear in mind
-that I can't be available all the time. If I'm not there, wait some time or 
+that I can't be available all the time. If I'm not there, wait some time or
 try another time of the day.
 
 You can also ask questions in the [Minecraft Forum
@@ -172,7 +174,7 @@ thread](http://www.minecraftforum.net/topic/1632003-mapcrafter-fast-minecraft-ma
 * Added support for Minecraft 1.8
   * **Since the structure of the textures has changed a bit (especially chest textures),
     you should extract the texture files from a 1.8 Minecraft Jar file to a new, clean
-    texture directory.** 
+    texture directory.**
 
 **v.1.5**
 
@@ -211,7 +213,7 @@ thread](http://www.minecraftforum.net/topic/1632003-mapcrafter-fast-minecraft-ma
 * Added a way to add more user-defined markers using the Leaflet API (#71)
 * Changed ``markers.js`` file attribute ``icon_size`` to ``iconSize``
   * **You should update your ``markers.js`` file and re-run ``mapcrafter_markers``
-    if you use markers.** 
+    if you use markers.**
 * Fixed a bug causing Mapcrafter not to use the ``data/`` directory as
   resource directory (#70)
 
@@ -233,7 +235,7 @@ thread](http://www.minecraftforum.net/topic/1632003-mapcrafter-fast-minecraft-ma
 **v.1.2**
 
 * Started refactoring the web template
-  * **Since some files were split up and are now in a separate ``static/`` directory, 
+  * **Since some files were split up and are now in a separate ``static/`` directory,
     you should manually delete the old *.js *.css files in your map directories and
     update the maps with mapcrafter to prevent a mess with old files.**
 * Added new options to specify the default view of a map
@@ -266,7 +268,7 @@ thread](http://www.minecraftforum.net/topic/1632003-mapcrafter-fast-minecraft-ma
 **v.1.0.1**
 
 * Fixed jungle wooden planks rendering as birch planks
-* Changed worldName attribute in template from part of the world path 
+* Changed worldName attribute in template from part of the world path
   to the name of the world section
 * Added hint about rendering the Nether/End to documentation
 
