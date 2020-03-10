@@ -185,7 +185,8 @@ bool Chunk::readNBT(const char* data, size_t len, nbt::Compression compression) 
       }
 
       for (i=0; i<4096; ++i) {
-        section.blocks[i] = palette_lookup[section.blocks[i]];
+        int32_t paletteId = (section.blocks[i] & 255) << 4;
+        section.blocks[i] = palette_lookup[paletteId];
       }
     }
 
