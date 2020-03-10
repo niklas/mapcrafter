@@ -187,15 +187,17 @@ bool Chunk::readNBT(const char* data, size_t len, nbt::Compression compression) 
       for (i=0; i<4096; ++i) {
         uint8_t d = 0;
         if (i % 2 == 0) {
-          d = section.data[i / 2] & 0xf;
+          d = section.data[i / 2] & 0x0f;
+          section.data[i / 2] = section.data[i / 2] & 0xf0;
         } else {
           d = ( section.data[i / 2] >> 4 ) & 0x0f;
+          section.data[i / 2] = section.data[i / 2] & 0x0f;
         }
         int32_t paletteId = (section.blocks[i] & 255) << 4 | d;
         if (paletteId > plen) {
           LOG(WARNING) << "Looking up Palette outside of boundaries at " << paletteId << " of " << plen;
         }
-        section.blocks[i] = palette_lookup[paletteId];
+        section.blocks[i] = palette_lookup[paletteId] >> 4;
       }
     }
 
