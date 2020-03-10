@@ -124,8 +124,10 @@ bool Chunk::readNBT(const char* data, size_t len, nbt::Compression compression) 
 		return true;
 
 	const nbt::TagList& sections_tag = level.findTag<nbt::TagList>("Sections");
-	if (sections_tag.tag_type != nbt::TagCompound::TAG_TYPE)
+	if (sections_tag.tag_type != nbt::TagCompound::TAG_TYPE) {
+    LOG(WARNING) << "Could not find Sections";
 		return true;
+  }
 
 	// go through all sections
 	for (auto it = sections_tag.payload.begin(); it != sections_tag.payload.end(); ++it) {
@@ -136,12 +138,16 @@ bool Chunk::readNBT(const char* data, size_t len, nbt::Compression compression) 
 				|| !section_tag.hasArray<nbt::TagByteArray>("Blocks", 4096)
 				|| !section_tag.hasArray<nbt::TagByteArray>("Data", 2048)
 				|| !section_tag.hasArray<nbt::TagByteArray>("BlockLight", 2048)
-				|| !section_tag.hasArray<nbt::TagByteArray>("SkyLight", 2048))
+				|| !section_tag.hasArray<nbt::TagByteArray>("SkyLight", 2048)) {
 			continue;
+      LOG(WARNING) << "Section not valid";
+    }
 
 		const nbt::TagByte& y = section_tag.findTag<nbt::TagByte>("Y");
-		if (y.payload >= CHUNK_HEIGHT)
+		if (y.payload >= CHUNK_HEIGHT) {
+      LOG(WARNING) << "Y too high";
 			continue;
+    }
 		const nbt::TagByteArray& blocks = section_tag.findTag<nbt::TagByteArray>("Blocks");
 		const nbt::TagByteArray& data = section_tag.findTag<nbt::TagByteArray>("Data");
 
