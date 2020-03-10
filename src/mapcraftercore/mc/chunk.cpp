@@ -158,6 +158,24 @@ bool Chunk::readNBT(const char* data, size_t len, nbt::Compression compression) 
 		ChunkSection section;
 		section.y = y.payload;
 		std::copy(blocks.payload.begin(), blocks.payload.end(), section.blocks);
+    if (section_tag.hasArray<nbt::TagIntArray>("Palette")) {
+      // In some of our chunks, there is a palette with a dynamic number of ints.
+      // In others, there is "Add"s
+      const nbt::TagIntArray& palette = section_tag.findTag<nbt::TagIntArray>("Palette");
+      int32_t plen = (unsigned) palette.payload.size();
+      std::vector<uint16_t> palette_lookup(plen);
+
+      size_t i = 0;
+      for (auto pit = palette.payload.begin(); pit != palette.payload.end(); ++pit, ++i) {
+        palette_lookup[i] = (*pit);
+      }
+
+      for (i=0; i<2048; ++i) {
+        section.blocks[i] = palette_lookup[section.blocks[i]];
+      }
+    }
+
+
 		if (!section_tag.hasArray<nbt::TagByteArray>("Add", 2048))
 			std::fill(&section.add[0], &section.add[2048], 0);
 		else {
