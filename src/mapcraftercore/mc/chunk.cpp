@@ -158,7 +158,18 @@ bool Chunk::readNBT(const char* data, size_t len, nbt::Compression compression) 
 		// create a ChunkSection-object
 		ChunkSection section;
 		section.y = y.payload;
+
+		if (!section_tag.hasArray<nbt::TagByteArray>("Add", 2048))
+			std::fill(&section.add[0], &section.add[2048], 0);
+		else {
+			const nbt::TagByteArray& add = section_tag.findTag<nbt::TagByteArray>("Add");
+			std::copy(add.payload.begin(), add.payload.end(), section.add);
+		}
+
 		std::copy(blocks.payload.begin(), blocks.payload.end(), section.blocks);
+		std::copy(data.payload.begin(), data.payload.end(), section.data);
+
+
     if (section_tag.hasArray<nbt::TagIntArray>("Palette")) {
       // In some of our chunks, there is a palette with a dynamic number of
       // ints. This seems to be a 1.13 backport to 1.12 done by JustEnoughIDs
@@ -179,13 +190,6 @@ bool Chunk::readNBT(const char* data, size_t len, nbt::Compression compression) 
     }
 
 
-		if (!section_tag.hasArray<nbt::TagByteArray>("Add", 2048))
-			std::fill(&section.add[0], &section.add[2048], 0);
-		else {
-			const nbt::TagByteArray& add = section_tag.findTag<nbt::TagByteArray>("Add");
-			std::copy(add.payload.begin(), add.payload.end(), section.add);
-		}
-		std::copy(data.payload.begin(), data.payload.end(), section.data);
 		std::copy(block_light.payload.begin(), block_light.payload.end(), section.block_light);
 		std::copy(sky_light.payload.begin(), sky_light.payload.end(), section.sky_light);
 
